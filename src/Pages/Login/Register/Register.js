@@ -1,14 +1,20 @@
-import React from "react";
-import { useCreateUserWithEmailAndPassword } from "react-firebase-hooks/auth";
+import React, { useState } from "react";
+import {
+  useCreateUserWithEmailAndPassword,
+  useUpdateProfile,
+} from "react-firebase-hooks/auth";
 import { Link, useNavigate } from "react-router-dom";
 import auth from "../../../firebase.init";
 import SocialLogin from "../SocialLogin/SocialLogin";
 import "./Register.css";
 
 const Register = () => {
+  const [agree, setAgree] = useState(false);
   //user create with email and password
   const [createUserWithEmailAndPassword, user, loading, error] =
-    useCreateUserWithEmailAndPassword(auth);
+    useCreateUserWithEmailAndPassword(auth, { sendEmailVerification: true });
+
+  const [updateProfile, updating, upDateError] = useUpdateProfile(auth);
 
   const navigate = useNavigate();
 
@@ -19,11 +25,11 @@ const Register = () => {
   // jodi user toire hoy....take home a niye jao
 
   if (user) {
-    navigate("/home");
+    console.log("user", user);
   }
 
   // handle register form
-  const handleRegister = (event) => {
+  const handleRegister = async (event) => {
     event.preventDefault();
     // console.log(event.target); // full formta accesshobe
     // console.log(event.target.email); // email k access kora
@@ -31,7 +37,12 @@ const Register = () => {
     const name = event.target.name.value;
     const email = event.target.email.value;
     const password = event.target.password.value;
-    createUserWithEmailAndPassword(email, password);
+    // const agree = event.target.terms.checked; [ 1ta system]
+
+    await createUserWithEmailAndPassword(email, password);
+    await updateProfile({ displayName: name });
+    console.log("Updated profile");
+    navigate("/home");
   };
   return (
     <div className="register-form">
@@ -51,16 +62,22 @@ const Register = () => {
           required
         />
         <input
+          onClick={() => setAgree(!agree)}
           style={{ width: "20px", height: "15px" }}
           type="checkbox"
           name="terms"
           id="terms"
         />
-        <label className="text-info fw-bold px-2 mb-3" htmlFor="checkbox">
-          agree with terms and Condition
+        <label
+          // className={agree ? "text-primary fw-bold " : "text-danger"} ( one way)
+          className={`ps-2 fw-bold ${agree ? "text-primary" : "text-danger"}`}
+          htmlFor="terms"
+        >
+          Accept with terms and Condition
         </label>
         <input
-          className="bg-primary w-50 mx-auto d-block"
+          disabled={!agree} // if not agree then register btn will be disabled
+          className="bg-primary w-50 mx-auto d-block mt-3 fw-bold"
           type="submit"
           value="Register"
         />
