@@ -6,7 +6,10 @@ import {
 } from "react-firebase-hooks/auth";
 import { Link, useNavigate } from "react-router-dom";
 import auth from "../../../firebase.init";
+import Loading from "../../Shared/Loading/Loading";
 import SocialLogin from "../SocialLogin/SocialLogin";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Login = () => {
   // useref
@@ -21,11 +24,10 @@ const Login = () => {
 
   // reset password
 
-  const [sendPasswordResetEmail] = useSendPasswordResetEmail(auth);
+  const [sendPasswordResetEmail, sending] = useSendPasswordResetEmail(auth);
 
   // error
   let errorElement; // for error
-  let loadingElement;
 
   if (error) {
     errorElement = <p className="text-danger">Error: {error?.message}</p>;
@@ -33,8 +35,8 @@ const Login = () => {
 
   // loading
 
-  if (loading) {
-    loadingElement = <p>Loading...</p>;
+  if (loading || sending) {
+    return <Loading></Loading>;
   }
 
   // if user created
@@ -56,8 +58,12 @@ const Login = () => {
 
   const sendResetPassword = async () => {
     const email = emailRef.current.value;
-    await sendPasswordResetEmail(email);
-    alert("Sent email");
+    if (email) {
+      await sendPasswordResetEmail(email);
+      toast("Sent email");
+    } else {
+      toast("please enter email address");
+    }
   };
 
   return (
@@ -92,7 +98,6 @@ const Login = () => {
         </Button>
       </Form>
       {errorElement}
-      {loadingElement}
       <p className="mt-3 fw-bold text-center">
         New to Genius Car ?
         <Link
@@ -105,15 +110,15 @@ const Login = () => {
       </p>
       <p className="mt-3 fw-bold text-center">
         Forgot Password ?
-        <Link
-          to="/register"
+        <button
           onClick={sendResetPassword}
-          className="text-primary px-3 fw-bold pe-auto text-decoration-none"
+          className="btn btn-link text-primary px-3 fw-bold pe-auto text-decoration-none"
         >
           Reset Password
-        </Link>
+        </button>
       </p>
       <SocialLogin></SocialLogin>
+      <ToastContainer />
     </div>
   );
 };

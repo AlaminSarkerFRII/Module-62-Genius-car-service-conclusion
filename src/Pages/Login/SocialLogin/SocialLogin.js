@@ -8,6 +8,7 @@ import {
 } from "react-firebase-hooks/auth";
 import auth from "../../../firebase.init";
 import { useNavigate } from "react-router-dom";
+import Loading from "../../Shared/Loading/Loading";
 
 const SocialLogin = () => {
   const navigate = useNavigate();
@@ -17,7 +18,6 @@ const SocialLogin = () => {
   const [signInWithGithub, user1, loading1, error1] = useSignInWithGithub(auth);
 
   let errorElement; // for error
-  let loadingElement;
 
   if (error || error1) {
     errorElement = (
@@ -27,8 +27,8 @@ const SocialLogin = () => {
     );
   }
 
-  if (loading) {
-    loadingElement = <p>Loading...</p>;
+  if (loading || loading1) {
+    return <Loading></Loading>;
   }
 
   if (user || user1) {
@@ -43,7 +43,6 @@ const SocialLogin = () => {
         <div style={{ height: "1px" }} className="w-50 bg-primary"></div>
       </div>
       {errorElement}
-      {loadingElement}
       <div className="py-3">
         <button
           onClick={() => signInWithGoogle()}
