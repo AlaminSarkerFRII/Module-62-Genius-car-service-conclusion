@@ -50,9 +50,22 @@ const Register = () => {
           placeholder="password"
           required
         />
-        <input className="bg-info" type="submit" value="Register" />
+        <input
+          style={{ width: "20px", height: "15px" }}
+          type="checkbox"
+          name="terms"
+          id="terms"
+        />
+        <label className="text-info fw-bold px-2 mb-3" htmlFor="checkbox">
+          agree with terms and Condition
+        </label>
+        <input
+          className="bg-primary w-50 mx-auto d-block"
+          type="submit"
+          value="Register"
+        />
       </form>
-      <p>
+      <p className="text-center fw-bold">
         Already have an account ?
         <Link
           to="/login"

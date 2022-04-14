@@ -1,6 +1,9 @@
 import React, { useRef } from "react";
 import { Button, Form } from "react-bootstrap";
-import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
+import {
+  useSendPasswordResetEmail,
+  useSignInWithEmailAndPassword,
+} from "react-firebase-hooks/auth";
 import { Link, useNavigate } from "react-router-dom";
 import auth from "../../../firebase.init";
 import SocialLogin from "../SocialLogin/SocialLogin";
@@ -16,16 +19,16 @@ const Login = () => {
   const [signInWithEmailAndPassword, user, loading, error] =
     useSignInWithEmailAndPassword(auth);
 
+  // reset password
+
+  const [sendPasswordResetEmail] = useSendPasswordResetEmail(auth);
+
   // error
   let errorElement; // for error
   let loadingElement;
 
   if (error) {
-    errorElement = (
-      <div>
-        <p className="text-danger">Error: {error?.message}</p>
-      </div>
-    );
+    errorElement = <p className="text-danger">Error: {error?.message}</p>;
   }
 
   // loading
@@ -49,6 +52,12 @@ const Login = () => {
 
   const navigateToRegister = (event) => {
     navigate("/register");
+  };
+
+  const sendResetPassword = async () => {
+    const email = emailRef.current.value;
+    await sendPasswordResetEmail(email);
+    alert("Sent email");
   };
 
   return (
@@ -75,23 +84,33 @@ const Login = () => {
             required
           />
         </Form.Group>
-        <Form.Group className="mb-3" controlId="formBasicCheckbox">
-          <Form.Check type="checkbox" label="Check me out" />
-        </Form.Group>
-        <Button variant="primary" type="submit">
-          Submit
+        <Button
+          variant="primary btn-primary w-50 mx-auto d-block p-2"
+          type="submit"
+        >
+          Login
         </Button>
       </Form>
       {errorElement}
       {loadingElement}
-      <p>
+      <p className="mt-3 fw-bold text-center">
         New to Genius Car ?
         <Link
           to="/register"
           onClick={navigateToRegister}
-          className="text-danger px-3 fw-bold pe-auto text-decoration-none"
+          className="text-primary px-3 fw-bold pe-auto text-decoration-none"
         >
           Please Register
+        </Link>
+      </p>
+      <p className="mt-3 fw-bold text-center">
+        Forgot Password ?
+        <Link
+          to="/register"
+          onClick={sendResetPassword}
+          className="text-primary px-3 fw-bold pe-auto text-decoration-none"
+        >
+          Reset Password
         </Link>
       </p>
       <SocialLogin></SocialLogin>
