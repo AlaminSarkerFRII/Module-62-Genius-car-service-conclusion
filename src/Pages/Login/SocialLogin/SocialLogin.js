@@ -2,7 +2,10 @@ import React from "react";
 import google from "../../../imgs/google.png";
 import { SiFacebook } from "react-icons/si";
 import { BsGithub } from "react-icons/bs";
-import { useSignInWithGoogle } from "react-firebase-hooks/auth";
+import {
+  useSignInWithGithub,
+  useSignInWithGoogle,
+} from "react-firebase-hooks/auth";
 import auth from "../../../firebase.init";
 import { useNavigate } from "react-router-dom";
 
@@ -11,18 +14,26 @@ const SocialLogin = () => {
   // social login
 
   const [signInWithGoogle, user, loading, error] = useSignInWithGoogle(auth);
+  const [signInWithGithub, user1, loading1, error1] = useSignInWithGithub(auth);
 
   let errorElement; // for error
+  let loadingElement;
 
-  if (error) {
+  if (error || error1) {
     errorElement = (
       <div>
-        <p className="text-danger">Error: {error.message}</p>
+        <p className="text-danger">
+          Error: {error?.message} {error1.message}
+        </p>
       </div>
     );
   }
 
-  if (user) {
+  if (loading) {
+    loadingElement = <p>Loading...</p>;
+  }
+
+  if (user || user1) {
     navigate("/home");
   }
 
@@ -34,6 +45,7 @@ const SocialLogin = () => {
         <div style={{ height: "1px" }} className="w-50 bg-primary"></div>
       </div>
       {errorElement}
+      {loadingElement}
       <div className="py-3">
         <button
           onClick={() => signInWithGoogle()}
@@ -50,7 +62,10 @@ const SocialLogin = () => {
         </button>
       </div>
       <div className="py-3">
-        <button className="btn btn-primary d-block w-50 mx-auto">
+        <button
+          onClick={() => signInWithGithub()}
+          className="btn btn-primary d-block w-50 mx-auto"
+        >
           <BsGithub className="fs-2 w-25 mx-auto"></BsGithub>
           <span> Sign In With Github</span>
         </button>

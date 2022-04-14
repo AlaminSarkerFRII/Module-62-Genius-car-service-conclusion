@@ -16,6 +16,24 @@ const Login = () => {
   const [signInWithEmailAndPassword, user, loading, error] =
     useSignInWithEmailAndPassword(auth);
 
+  // error
+  let errorElement; // for error
+  let loadingElement;
+
+  if (error) {
+    errorElement = (
+      <div>
+        <p className="text-danger">Error: {error?.message}</p>
+      </div>
+    );
+  }
+
+  // loading
+
+  if (loading) {
+    loadingElement = <p>Loading...</p>;
+  }
+
   // if user created
   if (user) {
     navigate("/home");
@@ -64,6 +82,8 @@ const Login = () => {
           Submit
         </Button>
       </Form>
+      {errorElement}
+      {loadingElement}
       <p>
         New to Genius Car ?
         <Link

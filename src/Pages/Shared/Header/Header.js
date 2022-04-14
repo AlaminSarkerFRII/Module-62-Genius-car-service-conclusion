@@ -4,7 +4,7 @@ import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Link } from "react-router-dom";
 import auth from "../../../firebase.init";
-import logo from "../../../imgs/logo.jpg";
+import logo from "../../../imgs/logo.png";
 import "./Header.css";
 
 const Header = () => {
@@ -18,7 +18,7 @@ const Header = () => {
       <Navbar collapseOnSelect expand="lg" sticky="top" bg="primary">
         <Container>
           <Navbar.Brand as={Link} to="/">
-            <img height={50} src={logo} alt="" />
+            <img className="w-50 h-50" src={logo} alt="" />
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
