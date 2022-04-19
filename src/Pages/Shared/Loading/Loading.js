@@ -1,5 +1,6 @@
 import React from "react";
 import { Spinner } from "react-bootstrap";
+import PageTitle from "../PageTitle/PageTitle";
 
 const Loading = () => {
   return (

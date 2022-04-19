@@ -23,6 +23,7 @@ const Header = () => {
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto">
+              <Nav.Link href="/home">Home</Nav.Link>
               <Nav.Link href="home#services">Services</Nav.Link>
               <Nav.Link href="home#experts">Experts</Nav.Link>
               <NavDropdown title="Dropdown" id="collasible-nav-dropdown">
@@ -45,7 +46,7 @@ const Header = () => {
               </Nav.Link>
               {user ? (
                 <button onClick={handleSignOut} className="btn btn-primary">
-                  Sign Out{" "}
+                  Sign Out
                 </button>
               ) : (
                 <Nav.Link eventKey={2} as={Link} to="login">
